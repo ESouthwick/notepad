@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
-import {Note} from './model/note.model';
-import {NoteService} from './services/note.service';
 import {NgClass} from '@angular/common';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatToolbar} from '@angular/material/toolbar';
-import {NotesFormComponent} from './components/notes-form/notes-form.component';
 import {MatListItem} from '@angular/material/list';
+import {NotesFormComponent} from './components/notes-form/notes-form.component';
+import {NoteService} from './services/note.service';
+import {Note} from './model/note.model';
 
 @Component({
   selector: 'app-root',
