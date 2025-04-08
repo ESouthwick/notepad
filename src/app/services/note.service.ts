@@ -7,4 +7,32 @@ import {Note} from '../model/note.model';
 })
 
 export class NoteService {
+  private notes: Note[] = JSON.parse(localStorage.getItem('notes') || '[]');
+  private notesSubject = new BehaviorSubject<Note[]>(this.notes);
+
+  notes$ = this.notesSubject.asObservable();
+
+  saveNote(note: Note) {
+    const existing = this.notes.find(n => n.id === note.id);
+    if (existing) {
+      Object.assign(existing, note, { updatedAt: new Date() });
+    } else {
+      this.notes.push({ ...note, id: crypto.randomUUID(), updatedAt: new Date() });
+    }
+    this.updateStorage();
+  }
+
+  deleteNote(id: string) {
+    this.notes = this.notes.filter(n => n.id !== id);
+    this.updateStorage();
+  }
+
+  getNote(id: string): Note | undefined {
+    return this.notes.find(n => n.id === id);
+  }
+
+  private updateStorage() {
+    localStorage.setItem('notes', JSON.stringify(this.notes));
+    this.notesSubject.next(this.notes);
+  }
 }

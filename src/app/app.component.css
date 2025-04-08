@@ -1,0 +1,11 @@
+mat-sidenav {
+  width: 300px;
+}
+
+mat-sidenav-container {
+  height: 100vh;
+}
+
+mat-toolbar {
+  gap: 16px;
+}

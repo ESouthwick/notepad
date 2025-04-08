@@ -1,1 +1,16 @@
-<p>notes-form works!</p>
+<form #form="ngForm" (ngSubmit)="onSave()">
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput [(ngModel)]="note.title" name="title" required>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Content</mat-label>
+    <textarea matInput [(ngModel)]="note.content" name="content" required></textarea>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Category</mat-label>
+    <input matInput [(ngModel)]="note.category" name="category" required>
+  </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+  <button mat-button (click)="close.emit()">Cancel</button>
+</form>
