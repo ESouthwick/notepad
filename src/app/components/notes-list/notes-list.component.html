@@ -1,12 +1,9 @@
-<button mat-raised-button color="primary" (click)="createNote()">New Note</button>
 <div *ngFor="let category of categories" class="category-section">
   <h2>{{ category }}</h2>
   <div class="notes-grid">
-    <mat-card >
-      <mat-card-title>
-      </mat-card-title>
-      <mat-card-content>
-      </mat-card-content>
+    <mat-card *ngFor="let note of getNotesByCategory(category)">
+      <mat-card-title>{{ note.title }}</mat-card-title>
+      <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
       <mat-card-actions>
         <button mat-icon-button >
           <mat-icon>edit</mat-icon></button>

@@ -8,8 +8,8 @@ import {Note} from '../model/note.model';
 
 export class NoteService {
   private notes: Note[] = [
-    {id: '1', title: 'first', content: 'this is a note', category: 'all', updatedAt: new Date()},
-    {id: '2', title: 'second', content: 'this is another note', category: 'all', updatedAt: new Date()}
+    {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
+    {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()}
   ];
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
 

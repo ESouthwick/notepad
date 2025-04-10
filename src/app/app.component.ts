@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {NgClass} from '@angular/common';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
@@ -7,10 +7,11 @@ import {MatListItem} from '@angular/material/list';
 import {NotesFormComponent} from './components/notes-form/notes-form.component';
 import {NoteService} from './services/note.service';
 import {Note} from './model/note.model';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, NgClass, MatSidenavContainer, MatToolbar, MatSidenav, MatSidenavContent, NotesFormComponent, MatListItem, RouterLink],
+  imports: [RouterOutlet, NgClass, MatSidenavContainer, MatToolbar, MatSidenav, MatSidenavContent, NotesFormComponent, MatListItem, RouterLink, MatButton, MatButton, MatButton],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

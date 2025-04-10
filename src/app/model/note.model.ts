@@ -5,3 +5,7 @@ export interface Note {
   category: string; // "Personal", "Work", etc
   updatedAt: Date;
 }
+
+export interface Category {
+  value: string;
+}

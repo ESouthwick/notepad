@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NoteService} from '../../services/note.service';
 import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
 import {NgForOf} from '@angular/common';
@@ -16,9 +16,9 @@ import {Note} from '../../model/note.model';
 })
 export class NotesOrganizeComponent {
  notes: Note[] = [
-   {id: '1', title: 'first', content: 'this is a note', category: 'all', updatedAt: new Date()},
-   {id: '2', title: 'second', content: 'this is another note', category: 'specific', updatedAt: new Date()}
- ]
+   {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
+   {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()}
+ ];
   constructor(private noteService: NoteService) {}
 
   drop(event: CdkDragDrop<any[]>) {

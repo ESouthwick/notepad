@@ -1,5 +1,5 @@
 <mat-sidenav-container [ngClass]="displayMode">
-  <mat-sidenav #sidenav mode="side" [(opened)]="sidenavOpen">
+  <mat-sidenav #sidenav mode="over" position="end" [(opened)]="sidenavOpen">
     <app-notes-form [note]="selectedNote" (save)="saveNote($event)" (close)="closeSidenav()"></app-notes-form>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -9,6 +9,7 @@
       <a mat-list-item routerLink="/organize">Organize</a>
       <a mat-list-item routerLink="/settings">Settings</a>
     </mat-toolbar>
+    <button mat-raised-button color="primary" (click)="createNote()">New Note</button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
