@@ -1,5 +1,5 @@
 <div cdkDropList (cdkDropListDropped)="drop($event)">
-  <div cdkDrag *ngFor="let note of notes$ | async" class="note-item">
+  <div cdkDrag *ngFor="let note of notes" class="note-item">
     {{ note.title }} ({{ note.category }})
   </div>
 </div>

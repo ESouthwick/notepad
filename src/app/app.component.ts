@@ -12,14 +12,16 @@ import {Note} from './model/note.model';
   selector: 'app-root',
   imports: [RouterOutlet, NgClass, MatSidenavContainer, MatToolbar, MatSidenav, MatSidenavContent, NotesFormComponent, MatListItem, RouterLink],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   sidenavOpen = false;
-  selectedNote!: Note;
+  selectedNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
   displayMode = 'normal'; // Default mode
 
-  constructor(private noteService: NoteService) {}
+  constructor(private noteService: NoteService) {
+    this.displayMode = localStorage.getItem('displayMode') || 'normal';
+  }
 
   openSidenav(note?: Note) {
     // this.selectedNote = note;
@@ -29,6 +31,14 @@ export class AppComponent {
   saveNote(note: Note) {
     this.noteService.saveNote(note);
     this.closeSidenav();
+  }
+
+  createNote() {
+    this.openSidenav();
+  }
+
+  editNote(note: Note) {
+    this.openSidenav(note);
   }
 
   closeSidenav() {

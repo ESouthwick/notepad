@@ -12,7 +12,7 @@ import {MatOption} from '@angular/material/core';
     MatOption
   ],
   templateUrl: './settings.component.html',
-  styleUrl: './settings.component.css'
+  styleUrl: './settings.component.scss'
 })
 export class SettingsComponent {
   displayMode = 'normal';

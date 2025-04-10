@@ -5,6 +5,7 @@ import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/ma
 import {NgForOf, SlicePipe} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {BehaviorSubject} from 'rxjs';
 
 @Component({
   selector: 'app-notes-list',
@@ -16,40 +17,23 @@ import {MatIcon} from '@angular/material/icon';
     NgForOf,
     MatCard,
     MatIconButton,
-    MatIcon,
-    SlicePipe
+    MatIcon
   ],
   templateUrl: './notes-list.component.html',
-  styleUrl: './notes-list.component.css'
+  styleUrl: './notes-list.component.scss'
 })
 export class NotesListComponent {
   @Output() edit = new EventEmitter<Note>();
   @Output() create = new EventEmitter<void>();
 
-  // @ts-ignore
-  notes$ = this.noteService.notes$;
   categories: string[] = [];
-  notesByCategory: { [key: string]: Note[] } = {};
 
   constructor(private noteService: NoteService) {
-    this.notes$.subscribe(notes => {
-      this.categories = [...new Set(notes.map(n => n.category))];
-    });
-  }
 
-  // getNotesByCategory(category: string): Note[] {
-  //   return this.noteService.notes$.value.filter(n => n.category === category);
-  // }
+  }
 
   createNote() {
     this.create.emit();
   }
 
-  editNote(note: Note) {
-    this.edit.emit(note);
-  }
-
-  deleteNote(id: string) {
-    this.noteService.deleteNote(id);
-  }
 }

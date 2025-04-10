@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
 import {NoteService} from '../../services/note.service';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
-import {AsyncPipe, NgForOf} from '@angular/common';
+import {CdkDrag, CdkDragDrop, CdkDropList} from '@angular/cdk/drag-drop';
+import {NgForOf} from '@angular/common';
+import {Note} from '../../model/note.model';
 
 @Component({
   selector: 'app-notes-organize',
   imports: [
     CdkDropList,
     CdkDrag,
-    NgForOf,
-    AsyncPipe
+    NgForOf
   ],
   templateUrl: './notes-organize.component.html',
-  styleUrl: './notes-organize.component.css'
+  styleUrl: './notes-organize.component.scss'
 })
 export class NotesOrganizeComponent {
-
-  // @ts-ignore
-  notes$ = this.noteService.notes$;
-
+ notes: Note[] = [
+   {id: '1', title: 'first', content: 'this is a note', category: 'all', updatedAt: new Date()},
+   {id: '2', title: 'second', content: 'this is another note', category: 'specific', updatedAt: new Date()}
+ ]
   constructor(private noteService: NoteService) {}
 
   drop(event: CdkDragDrop<any[]>) {

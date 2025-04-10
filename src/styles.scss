@@ -1,0 +1,24 @@
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.normal {
+  background: #fff;
+  color: #000;
+}
+
+.dark {
+  background: #333;
+  color: #fff;
+  mat-card, mat-toolbar { background: #444; color: #fff; }
+}
+
+.high-contrast {
+  background: #000;
+  color: #fff;
+  mat-card, mat-toolbar { border: 1px solid #fff; }
+}
