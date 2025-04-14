@@ -1,4 +1,5 @@
-<div *ngFor="let category of categories" class="category-section">
+<div *ngFor="let category of categories" class="category-section"
+     [attr.data-theme]="theme$ | async">
   <h2>{{ category }}</h2>
   <div class="notes-grid">
     <mat-card *ngFor="let note of getNotesByCategory(category)">

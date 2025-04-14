@@ -2,9 +2,11 @@ import {Component, EventEmitter, Output} from '@angular/core';
 import {Note} from '../../model/note.model';
 import {NoteService} from '../../services/note.service';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {NgForOf, SlicePipe} from '@angular/common';
+import {AsyncPipe, NgForOf, SlicePipe} from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {Observable, Subscription} from 'rxjs';
+import {Theme, ThemeService} from '../../services/theme.service';
 
 @Component({
   selector: 'app-notes-list',
@@ -16,7 +18,8 @@ import {MatIcon} from '@angular/material/icon';
     MatCard,
     MatIconButton,
     MatIcon,
-    SlicePipe
+    SlicePipe,
+    AsyncPipe
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.scss'
@@ -25,15 +28,22 @@ export class NotesListComponent {
   @Output() edit = new EventEmitter<Note>();
   @Output() create = new EventEmitter<void>();
 
-  notes: Note[] = [
-    {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
-    {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()}
-  ];
+  notes: Note[] = [];
+  private subscription: Subscription;
 
   categories: string[] = [];
+  theme$: Observable<Theme>;
 
-  constructor(private noteService: NoteService) {
-    this.categories = [...new Set(this.notes.map(n => n.category))];
+  constructor(
+    private noteService: NoteService,
+    private themeService: ThemeService
+  ) {
+    this.theme$ = this.themeService.theme$;
+
+    this.subscription = this.noteService.notes$.subscribe((notes) => {
+      this.notes = notes;
+      this.categories = [...new Set(this.notes.map(n => n.category))];
+    });
   }
 
   getNotesByCategory(category: string): Note[] {

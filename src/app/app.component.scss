@@ -1,11 +1,33 @@
 mat-sidenav {
+  background-color: var(--background-color);
+  color: var(--text-color);
   width: 300px;
 }
 
 mat-sidenav-container {
+  background-color: var(--background-color);
+  color: var(--text-color);
   height: 100vh;
 }
 
 mat-toolbar {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
   gap: 16px;
+}
+
+.fixed-plus-icon {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  border-radius: 50%;
+  width: 30px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }

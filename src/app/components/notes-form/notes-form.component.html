@@ -1,21 +1,23 @@
-<form #form="ngForm" (ngSubmit)="onSave()">
-  <h1> New Note </h1>
-  <mat-form-field>
-    <mat-label>Title</mat-label>
-    <input matInput [(ngModel)]="note.title" name="title" required>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Content</mat-label>
-    <textarea matInput [(ngModel)]="note.content" name="content" required></textarea>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Favorite food</mat-label>
-    <mat-select>
-      @for (set of section; track set) {
-        <mat-option [value]="set.value">{{set.value}}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-  <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
-  <button mat-button (click)="close.emit()">Cancel</button>
-</form>
+<div [attr.data-theme]="theme$ | async">
+  <form #form="ngForm" (ngSubmit)="onSave()">
+    <h1> New Note </h1>
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput [(ngModel)]="note.title" name="title" required>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Content</mat-label>
+      <textarea matInput [(ngModel)]="note.content" name="content" required></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Favorite food</mat-label>
+      <mat-select>
+        @for (set of section; track set) {
+          <mat-option [value]="set.value">{{set.value}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+    <button mat-button (click)="close.emit()">Cancel</button>
+  </form>
+</div>

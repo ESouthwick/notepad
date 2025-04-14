@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatSelect} from '@angular/material/select';
 import {MatOption} from '@angular/material/core';
+import {Theme, ThemeService} from '../../services/theme.service';
+import {Observable} from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-settings',
@@ -9,16 +12,21 @@ import {MatOption} from '@angular/material/core';
     MatFormField,
     MatLabel,
     MatSelect,
-    MatOption
+    MatOption,
+    AsyncPipe
   ],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss'
 })
 export class SettingsComponent {
-  displayMode = 'normal';
+  theme: Theme;
 
-  updateDisplayMode(mode: string) {
-    document.querySelector('mat-sidenav-container')?.classList.remove('normal', 'dark', 'high-contrast');
-    document.querySelector('mat-sidenav-container')?.classList.add(mode);
+  constructor(
+    private themeService: ThemeService
+  ) {
+    this.theme = this.themeService.getCurrentTheme();
+  }
+  setTheme(theme: Theme): void {
+    this.themeService.setTheme(theme);
   }
 }

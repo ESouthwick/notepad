@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
-import {NgClass} from '@angular/common';
+import {AsyncPipe, NgClass} from '@angular/common';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatToolbar} from '@angular/material/toolbar';
 import {MatListItem} from '@angular/material/list';
@@ -8,6 +8,8 @@ import {NotesFormComponent} from './components/notes-form/notes-form.component';
 import {NoteService} from './services/note.service';
 import {Note} from './model/note.model';
 import {MatButton} from '@angular/material/button';
+import {Theme, ThemeService} from './services/theme.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -23,7 +25,8 @@ import {MatButton} from '@angular/material/button';
     RouterLink,
     MatButton,
     MatButton,
-    MatButton
+    MatButton,
+    AsyncPipe
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -31,15 +34,23 @@ import {MatButton} from '@angular/material/button';
 export class AppComponent {
   sidenavOpen = false;
   selectedNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
-  displayMode = 'normal'; // Default mode
+  theme$: Observable<Theme>;
 
-  constructor(private noteService: NoteService) {
-    this.displayMode = localStorage.getItem('displayMode') || 'normal';
+  constructor(
+    private noteService: NoteService,
+    private themeService: ThemeService
+  ) {
+    this.theme$ = this.themeService.theme$;
   }
 
   openSidenav(note?: Note) {
-    // this.selectedNote = note;
-    this.sidenavOpen = true;
+    if(note) {
+      this.selectedNote = note;
+      this.noteService.setEdit(true);
+    } else{
+      this.noteService.setEdit(false);
+    }
+      this.sidenavOpen = true;
   }
 
   saveNote(note: Note) {
@@ -57,6 +68,6 @@ export class AppComponent {
 
   closeSidenav() {
     this.sidenavOpen = false;
-    // this.selectedNote = undefined;
+    this.selectedNote = this.noteService.getDefaultNote();
   }
 }

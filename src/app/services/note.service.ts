@@ -7,11 +7,14 @@ import {Note} from '../model/note.model';
 })
 
 export class NoteService {
+  private defaultNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
   private notes: Note[] = [
     {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
-    {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()}
+    {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()},
+    {id: '3', title: 'third', content: 'this is box', category: 'Play', updatedAt: new Date()},
   ];
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
+  isEdit = false;
 
   notes$ = this.notesSubject.asObservable();
 
@@ -30,8 +33,24 @@ export class NoteService {
     this.updateStorage();
   }
 
+  getNotes(): Note[] {
+    return this.notes;
+  }
+
   getNote(id: string): Note | undefined {
     return this.notes.find(n => n.id === id);
+  }
+
+  getEdit(){
+    return this.isEdit;
+  }
+
+  setEdit(data: boolean){
+    this.isEdit = data;
+  }
+
+  getDefaultNote(){
+    return this.defaultNote;
   }
 
   private updateStorage() {

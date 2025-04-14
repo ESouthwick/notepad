@@ -1,15 +1,20 @@
-<mat-sidenav-container [ngClass]="displayMode">
+<mat-sidenav-container [attr.data-theme]="theme$ | async">
   <mat-sidenav #sidenav mode="over" position="end" [(opened)]="sidenavOpen">
     <app-notes-form [note]="selectedNote" (save)="saveNote($event)" (close)="closeSidenav()"></app-notes-form>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar>
       <span>Notes App</span>
-      <a mat-list-item routerLink="/">Notes</a>
-      <a mat-list-item routerLink="/organize">Organize</a>
-      <a mat-list-item routerLink="/settings">Settings</a>
+      <button mat-button routerLink="/">Notes</button>
+      <button mat-button routerLink="/organize">Organize</button>
+      <button mat-button routerLink="/settings">Settings</button>
     </mat-toolbar>
-    <button mat-raised-button color="primary" (click)="createNote()">New Note</button>
+    <button mat-flat-button
+            color="primary"
+            class="fixed-plus-icon"
+            (click)="createNote()">
+      +
+    </button>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

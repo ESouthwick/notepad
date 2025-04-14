@@ -1,4 +1,5 @@
-<div cdkDropList (cdkDropListDropped)="drop($event)">
+<div cdkDropList (cdkDropListDropped)="drop($event)"
+     [attr.data-theme]="theme$ | async">
   <div cdkDrag *ngFor="let note of notes" class="note-item">
     {{ note.title }} ({{ note.category }})
   </div>

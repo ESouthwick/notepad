@@ -5,6 +5,10 @@ import {FormsModule} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
 import {MatSelect} from '@angular/material/select';
 import {MatOption} from '@angular/material/core';
+import {Observable} from 'rxjs';
+import {Theme, ThemeService} from '../../services/theme.service';
+import {NoteService} from '../../services/note.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-notes-form',
@@ -15,7 +19,8 @@ import {MatOption} from '@angular/material/core';
     MatInput,
     MatButton,
     MatSelect,
-    MatOption
+    MatOption,
+    AsyncPipe
   ],
   templateUrl: './notes-form.component.html',
   styleUrl: './notes-form.component.scss'
@@ -25,6 +30,18 @@ export class NotesFormComponent implements OnInit{
   @Output() save = new EventEmitter<Note>();
   @Output() close = new EventEmitter<void>();
 
+  theme$: Observable<Theme>;
+
+  constructor(
+    private themeService: ThemeService
+  ) {
+    this.theme$ = this.themeService.theme$;
+  }
+
+  ngOnInit(): void {
+    console.log(this.note);
+  }
+
   section: Category[] = [
     {value: 'Work'},
     {value: 'Play'},
@@ -32,13 +49,9 @@ export class NotesFormComponent implements OnInit{
     {value: 'Home'}
   ];
 
-  ngOnInit(): void {
-    console.log(this.note);
-  }
-
   onSave() {
-    this.save.emit({ ...this.note });
+    if(this.note) {
+      this.save.emit({...this.note});
+    }
   }
-
-
 }

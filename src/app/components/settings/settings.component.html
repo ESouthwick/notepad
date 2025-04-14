@@ -1,9 +1,11 @@
-<h2>Settings</h2>
-<mat-form-field>
-  <mat-label>Display Mode</mat-label>
-  <mat-select [(value)]="displayMode" (selectionChange)="updateDisplayMode($event.value)">
-    <mat-option value="normal">Normal</mat-option>
-    <mat-option value="dark">Dark</mat-option>
-    <mat-option value="high-contrast">High Contrast</mat-option>
-  </mat-select>
-</mat-form-field>
+<div [attr.data-theme]="theme">
+  <h2>Settings</h2>
+  <mat-form-field>
+    <mat-label>Display Mode</mat-label>
+    <mat-select [(value)]="theme" (selectionChange)="setTheme($event.value)">
+      <mat-option value="normal">Normal</mat-option>
+      <mat-option value="dark">Dark</mat-option>
+      <mat-option value="midnight">Midnight</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
