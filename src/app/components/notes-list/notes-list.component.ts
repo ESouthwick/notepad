@@ -51,6 +51,7 @@ export class NotesListComponent {
   }
 
   editNote(note: Note) {
+    console.log("edit");
     this.edit.emit(note);
   }
 

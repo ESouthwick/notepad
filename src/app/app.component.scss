@@ -1,14 +1,20 @@
 :host {
   :root {
     --mat-button-text-color: #333333;
+    --mdc-filled-button-label-text-color: #333333;
+    --mdc-filled-button-container-color: var(--secondary-color);
   }
 
   [data-theme="dark"] {
     --mat-button-text-color: #ffffff;
+    --mdc-filled-button-label-text-color: #ffffff;
+    --mdc-filled-button-container-color: var(--secondary-color);
   }
 
   [data-theme="midnight"] {
     --mat-button-text-color: #e0e1dd;
+    --mdc-filled-button-label-text-color: #e0e1dd;
+      --mdc-filled-button-container-color: var(--secondary-color);
   }
 
   mat-sidenav {

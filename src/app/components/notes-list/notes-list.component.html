@@ -6,10 +6,12 @@
       <mat-card-title>{{ note.title }}</mat-card-title>
       <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
       <mat-card-actions>
-        <button mat-icon-button >
-          <mat-icon>edit</mat-icon></button>
-        <button mat-icon-button >
-          <mat-icon>delete</mat-icon></button>
+        <button mat-icon-button (click)="editNote(note)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteNote(note.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

@@ -7,8 +7,8 @@ import {MatSelect} from '@angular/material/select';
 import {MatOption} from '@angular/material/core';
 import {Observable} from 'rxjs';
 import {Theme, ThemeService} from '../../services/theme.service';
-import {NoteService} from '../../services/note.service';
 import {AsyncPipe} from '@angular/common';
+import {NoteService} from '../../services/note.service';
 
 @Component({
   selector: 'app-notes-form',
@@ -33,6 +33,7 @@ export class NotesFormComponent implements OnInit{
   theme$: Observable<Theme>;
 
   constructor(
+    private noteService: NoteService,
     private themeService: ThemeService
   ) {
     this.theme$ = this.themeService.theme$;
@@ -52,6 +53,7 @@ export class NotesFormComponent implements OnInit{
   onSave() {
     if(this.note) {
       this.save.emit({...this.note});
+      this.note = this.noteService.getDefaultNote();
     }
   }
 }
