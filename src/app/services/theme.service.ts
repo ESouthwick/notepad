@@ -12,11 +12,7 @@ export class ThemeService {
 
   constructor() {
     const savedTheme = localStorage.getItem('theme') as Theme;
-    if (savedTheme && ['light', 'dark', 'midnight'].includes(savedTheme)) {
-      this.setTheme(savedTheme);
-    } else {
-      this.setTheme('light');
-    }
+    this.setTheme(savedTheme && ['light', 'dark', 'midnight'].includes(savedTheme) ? savedTheme : 'light');
   }
 
   setTheme(theme: Theme): void {

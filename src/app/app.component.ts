@@ -1,13 +1,12 @@
 import {Component} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
-import {AsyncPipe, NgClass} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 import {MatToolbar} from '@angular/material/toolbar';
-import {MatListItem} from '@angular/material/list';
 import {NotesFormComponent} from './components/notes-form/notes-form.component';
 import {NoteService} from './services/note.service';
 import {Note} from './model/note.model';
-import {MatButton} from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button';
 import {Theme, ThemeService} from './services/theme.service';
 import {Observable} from 'rxjs';
 
@@ -15,17 +14,13 @@ import {Observable} from 'rxjs';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    NgClass,
     MatSidenavContainer,
     MatToolbar,
     MatSidenav,
     MatSidenavContent,
     NotesFormComponent,
-    MatListItem,
     RouterLink,
-    MatButton,
-    MatButton,
-    MatButton,
+    MatButtonModule,
     AsyncPipe
   ],
   templateUrl: './app.component.html',
