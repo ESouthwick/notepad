@@ -51,7 +51,7 @@ export class NotesListComponent{
   }
 
   editNote(note: Note) {
-    console.log('NotesListComponent: Emitting edit for note', note);
+    this.noteService.setEdit(true);
     this.sidenavService.openSidenav(note);
   }
 

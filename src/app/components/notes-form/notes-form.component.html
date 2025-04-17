@@ -1,6 +1,6 @@
 <div [attr.data-theme]="theme$ | async">
   <form #form="ngForm" (ngSubmit)="onSave()">
-    <h1> New Note </h1>
+    <h1>{{title}}</h1>
     <mat-form-field>
       <mat-label>Title</mat-label>
       <input matInput [(ngModel)]="note.title" name="title" required>
@@ -17,7 +17,7 @@
         }
       </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="!form.valid">Save</button>
     <button mat-button (click)="close.next()">Cancel</button>
   </form>
 </div>

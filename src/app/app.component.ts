@@ -49,7 +49,9 @@ export class AppComponent implements OnInit, OnDestroy{
           this.sidenav.open();
         }
         else{
-          this.sidenav.close();
+          if(this.sidenav){
+            this.sidenav.close();
+          }
         }
         this.cdr.detectChanges();
       })
@@ -57,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
     this.subs.add(
       this.sidenavService.selectedNote$.subscribe(note => {
-        console.log('AppComponent: Selected note', note);
+
         this.selectedNote = <Note>note;
         this.cdr.detectChanges();
       })

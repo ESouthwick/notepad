@@ -7,20 +7,20 @@ import {Note} from '../model/note.model';
   providedIn: 'root'
 })
 export class SidenavService {
-  private selectedNoteSubject = new BehaviorSubject<Note | null>(null);
-  selectedNote$: Observable<Note | null> = this.selectedNoteSubject.asObservable();
+  private defaultNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
+  private selectedNoteSubject = new BehaviorSubject<Note>(this.defaultNote);
+  selectedNote$: Observable<Note> = this.selectedNoteSubject.asObservable();
 
   private sidenavOpenSubject = new BehaviorSubject<boolean>(false);
   sidenavOpen$: Observable<boolean> = this.sidenavOpenSubject.asObservable();
 
   openSidenav(note: Note): void {
-    console.log('SidenavService: Opening sidenav with note', note);
     this.selectedNoteSubject.next({...note});
     this.sidenavOpenSubject.next(true);
   }
 
   closeSidenav(): void {
-    this.selectedNoteSubject.next(null);
+    this.selectedNoteSubject.next(this.defaultNote);
     this.sidenavOpenSubject.next(false);
   }
 }

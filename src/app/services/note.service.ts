@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, map} from 'rxjs';
 import {Note} from '../model/note.model';
 
 @Injectable({
@@ -16,7 +16,9 @@ export class NoteService {
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
   isEdit = false;
 
-  notes$ = this.notesSubject.asObservable();
+  notes$ = this.notesSubject.asObservable().pipe(
+    map(notes => notes.filter(note => note != null))
+  )
 
   saveNote(note: Note) {
     const existing = this.notes.find(n => n.id === note.id);

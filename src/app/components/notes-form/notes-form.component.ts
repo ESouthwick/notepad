@@ -31,6 +31,7 @@ export class NotesFormComponent implements OnInit{
   @Output() close = new EventEmitter<void>();
 
   theme$: Observable<Theme>;
+  title!: string;
 
   constructor(
     private noteService: NoteService,
@@ -40,7 +41,12 @@ export class NotesFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    console.log(this.note);
+    if(this.note.title == '') {
+      this.title = "New Note"
+    } else {
+      this.title = this.note.title
+
+    }
   }
 
   section: Category[] = [
