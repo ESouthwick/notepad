@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {Note} from '../../model/note.model';
 import {NoteService} from '../../services/note.service';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
@@ -7,6 +7,7 @@ import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {Observable, Subscription} from 'rxjs';
 import {Theme, ThemeService} from '../../services/theme.service';
+import {SidenavService} from '../../services/sidepanel.service';
 
 @Component({
   selector: 'app-notes-list',
@@ -24,23 +25,22 @@ import {Theme, ThemeService} from '../../services/theme.service';
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.scss'
 })
-export class NotesListComponent {
-  @Output() edit = new EventEmitter<Note>();
-  @Output() create = new EventEmitter<void>();
+export class NotesListComponent{
 
   notes: Note[] = [];
-  private subscription: Subscription;
+  private subs: Subscription;
 
   categories: string[] = [];
   theme$: Observable<Theme>;
 
   constructor(
     private noteService: NoteService,
+    private sidenavService: SidenavService,
     private themeService: ThemeService
   ) {
     this.theme$ = this.themeService.theme$;
 
-    this.subscription = this.noteService.notes$.subscribe((notes) => {
+    this.subs = this.noteService.notes$.subscribe((notes) => {
       this.notes = notes;
       this.categories = [...new Set(this.notes.map(n => n.category))];
     });
@@ -51,8 +51,8 @@ export class NotesListComponent {
   }
 
   editNote(note: Note) {
-    console.log("edit");
-    this.edit.emit(note);
+    console.log('NotesListComponent: Emitting edit for note', note);
+    this.sidenavService.openSidenav(note);
   }
 
   deleteNote(id: string) {

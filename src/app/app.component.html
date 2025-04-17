@@ -1,6 +1,9 @@
 <mat-sidenav-container [attr.data-theme]="theme$ | async">
   <mat-sidenav #sidenav mode="over" position="end" [(opened)]="sidenavOpen">
-    <app-notes-form [note]="selectedNote" (save)="saveNote($event)" (close)="closeSidenav()"></app-notes-form>
+    <app-notes-form [note]="selectedNote"
+                    (save)="saveNote($event)"
+                    (close)="closeSidenav()">
+    </app-notes-form>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar>
