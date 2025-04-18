@@ -6,6 +6,10 @@ export interface Note {
   updatedAt: Date;
 }
 
+export interface CategorizedNotes {
+  [category: string]: Note[];
+}
+
 export interface Category {
   value: string;
 }

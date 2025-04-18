@@ -11,7 +11,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Category selection</mat-label>
-      <mat-select>
+      <mat-select [(value)]="note.category" required>
         @for (set of section; track set) {
           <mat-option [value]="set.value">{{set.value}}</mat-option>
         }

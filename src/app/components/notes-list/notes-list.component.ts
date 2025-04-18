@@ -8,6 +8,7 @@ import {MatIcon} from '@angular/material/icon';
 import {Observable, Subscription} from 'rxjs';
 import {Theme, ThemeService} from '../../services/theme.service';
 import {SidenavService} from '../../services/sidepanel.service';
+import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-notes-list',
@@ -20,7 +21,9 @@ import {SidenavService} from '../../services/sidepanel.service';
     MatIconButton,
     MatIcon,
     SlicePipe,
-    AsyncPipe
+    AsyncPipe,
+    CdkDrag,
+    CdkDropList
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.scss'
@@ -57,6 +60,12 @@ export class NotesListComponent{
 
   deleteNote(id: string) {
     this.noteService.deleteNote(id);
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    moveItemInArray(this.notes, event.previousIndex, event.currentIndex);
+    this.noteService['notes'] = this.notes; // Direct update (bypass readonly)
+    this.noteService['updateStorage'](); // Call private method
   }
 
 }

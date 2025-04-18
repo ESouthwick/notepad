@@ -1,8 +1,9 @@
-<div *ngFor="let category of categories" class="category-section"
+<div cdkDropList (cdkDropListDropped)="drop($event)"
+     *ngFor="let category of categories" class="category-section"
      [attr.data-theme]="theme$ | async">
   <h2>{{ category }}</h2>
   <div class="notes-grid">
-    <mat-card *ngFor="let note of getNotesByCategory(category)">
+    <mat-card cdkDrag *ngFor="let note of getNotesByCategory(category)">
       <mat-card-title>{{ note.title }}</mat-card-title>
       <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
       <mat-card-actions>
