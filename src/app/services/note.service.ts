@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, map} from 'rxjs';
-import {Note} from '../model/note.model';
+import {BehaviorSubject, map, Observable} from 'rxjs';
+import {CategorizedNotes, Note} from '../model/note.model';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +13,40 @@ export class NoteService {
     {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
     {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()},
     {id: '3', title: 'third', content: 'this is box', category: 'Play', updatedAt: new Date()},
+    {id: '4', title: 'fourth', content: 'this is another note', category: 'Home', updatedAt: new Date()},
   ];
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
+
   isEdit = false;
 
   notes$ = this.notesSubject.asObservable().pipe(
     map(notes => notes.filter(note => note != null))
-  )
+  );
+
+  categories: string[] = ['Play', 'Work', 'Family', 'Home'];
+  categories$ = new BehaviorSubject<string[]>(this.categories).asObservable();
+  categorizedNotes$: Observable<CategorizedNotes> = this.notesSubject.asObservable().pipe(
+    map(notes => {
+      const categorized: CategorizedNotes = {Play: [], Work: [], Family: [], Home: []};
+      notes.forEach(note => {
+        if(note && this.categories.includes(note.category)){
+          categorized[note.category].push(note);
+        }
+      });
+      return categorized;
+    })
+  );
+
+  constructor() {
+    const stored = localStorage.getItem('notes');
+    if (stored) {
+      this.notes = JSON.parse(stored).map((note: any) => ({
+        ...note,
+        updatedAt: new Date(note.updatedAt)
+      }));
+      this.notesSubject.next(this.notes);
+    }
+  }
 
   saveNote(note: Note) {
     const existing = this.notes.find(n => n.id === note.id);
@@ -55,7 +83,43 @@ export class NoteService {
     return this.defaultNote;
   }
 
+  updateNote(updatedNote: Note): void {
+    if (!['Play', 'Work', 'Family', 'Home'].includes(updatedNote.category)) {
+      updatedNote.category = 'Other';
+    }
+    const notes = this.notesSubject.getValue();
+    const index = notes.findIndex(note => note.id === updatedNote.id);
+    if (index !== -1) {
+      notes[index] = { ...updatedNote, updatedAt: new Date() };
+      this.notesSubject.next([...notes]);
+    }
+  }
+
+  moveNote(event: CdkDragDrop<Note[]>){
+    const notes = this.notesSubject.getValue();
+    if(event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      const note = event.previousContainer.data[event.previousIndex];
+      note.category = event.container.id;
+      note.updatedAt = new Date();
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+    this.notesSubject.next([...notes]);
+    this.updateStorage();
+  }
+
   private updateStorage() {
+    const serializedNotes = this.notes
+      .map( note => ({
+        ...note,
+        updatedAt: note.updatedAt.toISOString()
+      }));
     localStorage.setItem('notes', JSON.stringify(this.notes));
     this.notesSubject.next(this.notes);
   }

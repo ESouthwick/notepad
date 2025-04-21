@@ -1,19 +1,26 @@
-<div cdkDropList (cdkDropListDropped)="drop($event)"
-     *ngFor="let category of categories" class="category-section"
+<div *ngFor="let category of categories" class="category-section"
      [attr.data-theme]="theme$ | async">
-  <h2>{{ category }}</h2>
-  <div class="notes-grid">
-    <mat-card cdkDrag *ngFor="let note of getNotesByCategory(category)">
-      <mat-card-title>{{ note.title }}</mat-card-title>
-      <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
-      <mat-card-actions>
-        <button mat-icon-button (click)="editNote(note)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button (click)="deleteNote(note.id)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </mat-card-actions>
-    </mat-card>
+  <h2 *ngIf="categorizedNotes[category].length > 0" >{{ category }}</h2>
+  <div class="notes-grid"
+       cdkDropList
+       [cdkDropListData]="categorizedNotes[category]"
+       [cdkDropListConnectedTo]="dropListIds"
+       (cdkDropListDropped)="drop($event)"
+       [id]="category + '-drop-list'">
+    @for (note of categorizedNotes[category]; track note.id) {
+      <mat-card cdkDrag>
+        <div cdkDragHandle class="drag-handle">⋮⋮</div>
+        <mat-card-title>{{ note.title }}</mat-card-title>
+        <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
+        <mat-card-actions>
+          <button mat-icon-button (click)="editNote(note)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteNote(note.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
   </div>
 </div>

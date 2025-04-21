@@ -1,14 +1,21 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {Note} from '../../model/note.model';
+import {Component, OnDestroy} from '@angular/core';
+import {CategorizedNotes, Note} from '../../model/note.model';
 import {NoteService} from '../../services/note.service';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {AsyncPipe, NgForOf, SlicePipe} from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf, SlicePipe} from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {Observable, Subscription} from 'rxjs';
 import {Theme, ThemeService} from '../../services/theme.service';
 import {SidenavService} from '../../services/sidepanel.service';
-import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/drag-drop';
+import {
+  CdkDrag,
+  CdkDragDrop,
+  CdkDragHandle,
+  CdkDropList,
+  moveItemInArray,
+  transferArrayItem
+} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-notes-list',
@@ -23,17 +30,19 @@ import {CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray} from '@angular/cdk/d
     SlicePipe,
     AsyncPipe,
     CdkDrag,
-    CdkDropList
+    CdkDropList,
+    CdkDragHandle,
+    NgIf
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.scss'
 })
-export class NotesListComponent{
-
+export class NotesListComponent implements OnDestroy{
   notes: Note[] = [];
   private subs: Subscription;
-
-  categories: string[] = [];
+  categories: string[] = ['Play', 'Work', 'Family', 'Home'];
+  categorizedNotes: CategorizedNotes = { Play: [], Work: [], Family: [], Home: [] };
+  dropListIds = this.categories.map(c => `${c}-drop-list`);
   theme$: Observable<Theme>;
 
   constructor(
@@ -43,14 +52,9 @@ export class NotesListComponent{
   ) {
     this.theme$ = this.themeService.theme$;
 
-    this.subs = this.noteService.notes$.subscribe((notes) => {
-      this.notes = notes;
-      this.categories = [...new Set(this.notes.map(n => n.category))];
+    this.subs = this.noteService.categorizedNotes$.subscribe((notes) => {
+      this.categorizedNotes = notes;
     });
-  }
-
-  getNotesByCategory(category: string): Note[] {
-    return this.notes.filter(n => n.category === category);
   }
 
   editNote(note: Note) {
@@ -62,10 +66,24 @@ export class NotesListComponent{
     this.noteService.deleteNote(id);
   }
 
-  drop(event: CdkDragDrop<any[]>) {
-    moveItemInArray(this.notes, event.previousIndex, event.currentIndex);
-    this.noteService['notes'] = this.notes; // Direct update (bypass readonly)
-    this.noteService['updateStorage'](); // Call private method
+  drop(event: CdkDragDrop<Note[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      const note = event.previousContainer.data[event.previousIndex];
+      note.category = event.container.id;
+      note.updatedAt = new Date();
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      this.noteService.updateNote({ ...note, category: event.container.id });
+    }
   }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+  }
 }
