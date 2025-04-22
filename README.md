@@ -110,21 +110,26 @@ The project is organized into the following key directories and files:
 ```src/
 ├── app/
 │   ├── model/
-│   │   └── note.model.ts          # Defines the interfaces for Note and CategorizedNotes
-│   ├── services/
-│   │   ├── note.service.ts        # Manages note data (CRUD operations, drag-and-drop logic)
-│   │   ├── theme.service.ts       # Handles the application's theme switching functionality
-│   │   └── sidepanel.service.ts   # Controls the behavior and state of the sidenav component
-│   ├── notes-list/
-│   │   ├── notes-list.component.ts # Component responsible for displaying and interacting with lists of notes
-│   │   ├── notes-list.component.html # HTML template for rendering the notes list
-│   │   └── notes-list.component.scss # Styles specific to the notes list component
-│   └── app.module.ts              # The main application module (or setup for standalone components)
-└── styles.scss                    # Global style definitions for the application
+│   │   └── note.model.ts                   # Defines the interfaces for Note and CategorizedNotes
+|   ├── services/
+│   │   ├── note.service.ts                 # Manages note data (CRUD operations, drag-and-drop logic)
+│   │   ├── theme.service.ts                # Handles the application's theme switching functionality
+│   │   └── sidepanel.service.ts            # Controls the behavior and state of the sidenav component
+|   └── components/
+|       ├── notes-form/
+│       |   ├── notes-form.component.ts     # Component responsible for displaying and interacting with a note
+│       |   ├── notes-form.component.html   # HTML template for rendering the note
+│       |   └── notes-form.component.scss   # Styles specific to the note component
+│       └── notes-list/
+│           ├── notes-list.component.ts     # Component responsible for displaying and interacting with lists of notes
+│           ├── notes-list.component.html   # HTML template for rendering the notes list
+│           └── notes-list.component.scss   # Styles specific to the notes list component
+└── styles.scss                             # Global style definitions for the application
 ```
 **Key Components:**
 
 * **`NotesListComponent`:** This component displays notes organized by category, handles user interactions like drag-and-drop, and provides functionality for editing and deleting notes.
+* **`NotesFormComponent`:** This component displays a form for note creation, handles user inputs for each part of the note, and provides functionality for editing.
 * **`NoteService`:** This service is central to managing note data. It handles creating, reading, updating, and deleting notes, as well as organizing them into categories and persisting them in local storage.
 * **`ThemeService`:** This service manages the application's theme, allowing users to switch between light and dark modes. It typically uses an observable to notify components of theme changes.
 * **`SidenavService`:** This service controls the visibility and data flow for the sidenav component, which is used for adding and editing notes.
