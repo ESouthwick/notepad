@@ -7,15 +7,14 @@ import {CategorizedNotes, Note} from '../model/note.model';
 })
 
 export class NoteService {
-  private defaultNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
-  private notes: Note[] = [
-    {id: '1', title: 'first', content: 'this is a note', category: 'Play', updatedAt: new Date()},
-    {id: '2', title: 'second', content: 'this is another note', category: 'Work', updatedAt: new Date()},
-    {id: '3', title: 'third', content: 'this is box', category: 'Play', updatedAt: new Date()},
-    {id: '4', title: 'fourth', content: 'this is another note', category: 'Home', updatedAt: new Date()},
-  ];
+  private defaultNote: Note = {
+    id: '',
+    title: '',
+    content: '',
+    category: '',
+    updatedAt: new Date()};
+  private notes: Note[] = [];
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
-
   notes$ = this.notesSubject.asObservable().pipe(
     map(notes => notes.filter(note => note != null))
   );

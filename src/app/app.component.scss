@@ -37,6 +37,12 @@
 
   mat-toolbar .mat-mdc-button{
     color: var(--mat-button-text-color);
+    transition: color 0.3s ease;
+
+    &:hover {
+      background-color: var(--secondary-color);
+      color: var(--background-color);
+    }
   }
 }
 
@@ -54,4 +60,10 @@
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   z-index: 1000;
+  transition: color 0.3s ease;
+
+  &:hover {
+    background-color: var(--secondary-color);
+    color: var(--background-color);
+  }
 }

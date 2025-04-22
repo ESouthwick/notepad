@@ -10,11 +10,15 @@
          (cdkDropListDropped)="drop($event, category)"
          [id]="category + '-drop-list'">
       @for (note of categorizedNotes[category]; track note.id) {
-        <mat-card cdkDrag>
-          <div cdkDragHandle class="drag-handle">⋮⋮</div>
-          <mat-card-title>{{ note.title }}</mat-card-title>
-          <mat-card-content>{{ note.content | slice:0:50 }}...</mat-card-content>
-          <mat-card-actions>
+        <mat-card cdkDrag class="note-card">
+          <mat-card-content class="note-content">
+            <mat-card-title>{{ note.title }}</mat-card-title>
+            <p>{{ note.content | slice:0:50 }}...</p>
+          </mat-card-content>
+          <mat-card-actions class="note-actions">
+            <button mat-icon-button cdkDragHandle>
+              <mat-icon>drag_indicator</mat-icon>
+            </button>
             <button mat-icon-button (click)="editNote(note)">
               <mat-icon>edit</mat-icon>
             </button>
