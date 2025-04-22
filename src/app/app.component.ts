@@ -59,7 +59,6 @@ export class AppComponent implements OnInit, OnDestroy{
 
     this.subs.add(
       this.sidenavService.selectedNote$.subscribe(note => {
-
         this.selectedNote = <Note>note;
         this.cdr.detectChanges();
       })
@@ -76,7 +75,6 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   createNote() {
-      this.noteService.setEdit(true);
       this.sidenavService.openSidenav(this.noteService.getDefaultNote());
   }
 

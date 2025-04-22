@@ -27,14 +27,24 @@ import {SidenavService} from '../../services/sidepanel.service';
   styleUrl: './notes-form.component.scss'
 })
 export class NotesFormComponent implements OnInit{
-  @Input() note: Note = { id: '', title: '', content: '', category: '', updatedAt: new Date() };
+  @Input() note: Note = {
+    id: '',
+    title: '',
+    content: '',
+    category: '',
+    updatedAt: new Date()
+  };
   @Output() save = new EventEmitter<Note>();
   @Output() close = new EventEmitter<void>();
   private subs = new Subscription();
-
   theme$: Observable<Theme>;
   title!: string;
-
+  section: Category[] = [
+    {value: 'Work'},
+    {value: 'Play'},
+    {value: 'Family'},
+    {value: 'Home'}
+  ];
 
   constructor(
     private noteService: NoteService,
@@ -57,13 +67,6 @@ export class NotesFormComponent implements OnInit{
       })
     );
   }
-
-  section: Category[] = [
-    {value: 'Work'},
-    {value: 'Play'},
-    {value: 'Family'},
-    {value: 'Home'}
-  ];
 
   onSave() {
     if(this.note) {

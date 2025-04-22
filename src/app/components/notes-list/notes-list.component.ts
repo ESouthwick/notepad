@@ -49,14 +49,12 @@ export class NotesListComponent implements OnDestroy{
     private themeService: ThemeService
   ) {
     this.theme$ = this.themeService.theme$;
-
     this.subs = this.noteService.categorizedNotes$.subscribe((notes) => {
       this.categorizedNotes = notes;
     });
   }
 
   editNote(note: Note) {
-    this.noteService.setEdit(true);
     this.sidenavService.openSidenav(note);
   }
 

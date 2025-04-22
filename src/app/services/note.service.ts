@@ -14,10 +14,7 @@ export class NoteService {
     {id: '3', title: 'third', content: 'this is box', category: 'Play', updatedAt: new Date()},
     {id: '4', title: 'fourth', content: 'this is another note', category: 'Home', updatedAt: new Date()},
   ];
-  //issue with the notes being moved into another category and getting the category wiped.
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
-
-  isEdit = false;
 
   notes$ = this.notesSubject.asObservable().pipe(
     map(notes => notes.filter(note => note != null))
@@ -61,22 +58,6 @@ export class NoteService {
   deleteNote(id: string) {
     this.notes = this.notes.filter(n => n.id !== id);
     this.updateStorage();
-  }
-
-  getNotes(): Note[] {
-    return this.notes;
-  }
-
-  getNote(id: string): Note | undefined {
-    return this.notes.find(n => n.id === id);
-  }
-
-  getEdit(){
-    return this.isEdit;
-  }
-
-  setEdit(data: boolean){
-    this.isEdit = data;
   }
 
   getDefaultNote(){
