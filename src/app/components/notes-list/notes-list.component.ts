@@ -2,7 +2,7 @@ import {Component, OnDestroy} from '@angular/core';
 import {CategorizedNotes, Note} from '../../model/note.model';
 import {NoteService} from '../../services/note.service';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from '@angular/material/card';
-import {AsyncPipe, NgForOf, NgIf, SlicePipe} from '@angular/common';
+import {AsyncPipe, SlicePipe} from '@angular/common';
 import {MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {Observable, Subscription} from 'rxjs';
@@ -23,7 +23,6 @@ import {
     MatCardActions,
     MatCardContent,
     MatCardTitle,
-    NgForOf,
     MatCard,
     MatIconButton,
     MatIcon,
@@ -31,8 +30,7 @@ import {
     AsyncPipe,
     CdkDrag,
     CdkDropList,
-    CdkDragHandle,
-    NgIf
+    CdkDragHandle
   ],
   templateUrl: './notes-list.component.html',
   styleUrl: './notes-list.component.scss'
@@ -66,7 +64,7 @@ export class NotesListComponent implements OnDestroy{
     this.noteService.deleteNote(id);
   }
 
-  drop(event: CdkDragDrop<Note[]>): void {
+  drop(event: CdkDragDrop<Note[]>, category: string): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -79,7 +77,7 @@ export class NotesListComponent implements OnDestroy{
         event.previousIndex,
         event.currentIndex
       );
-      this.noteService.updateNote({ ...note, category: event.container.id });
+      this.noteService.updateNote({ ...note, category, updatedAt: new Date() });
     }
   }
 

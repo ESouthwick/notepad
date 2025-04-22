@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, map, Observable} from 'rxjs';
 import {CategorizedNotes, Note} from '../model/note.model';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,7 @@ export class NoteService {
     {id: '3', title: 'third', content: 'this is box', category: 'Play', updatedAt: new Date()},
     {id: '4', title: 'fourth', content: 'this is another note', category: 'Home', updatedAt: new Date()},
   ];
+  //issue with the notes being moved into another category and getting the category wiped.
   private notesSubject = new BehaviorSubject<Note[]>(this.notes);
 
   isEdit = false;
@@ -93,25 +93,6 @@ export class NoteService {
       notes[index] = { ...updatedNote, updatedAt: new Date() };
       this.notesSubject.next([...notes]);
     }
-  }
-
-  moveNote(event: CdkDragDrop<Note[]>){
-    const notes = this.notesSubject.getValue();
-    if(event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      const note = event.previousContainer.data[event.previousIndex];
-      note.category = event.container.id;
-      note.updatedAt = new Date();
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
-    this.notesSubject.next([...notes]);
-    this.updateStorage();
   }
 
   private updateStorage() {
