@@ -3,3 +3,31 @@ form {
   background-color: var(--background-color);
   color: var(--secondary-color-color);
 }
+
+.notes-form-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.note-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  h2 {
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+}

@@ -1,8 +1,10 @@
 export interface Note {
-  id: string;
+  _id?: string;
+  id?: string;  // For backward compatibility
   title: string;
   content: string;
-  category: string; // "Personal", "Work", etc
+  category: string;
+  createdAt?: Date;
   updatedAt: Date;
 }
 

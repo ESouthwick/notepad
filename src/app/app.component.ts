@@ -1,85 +1,66 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
-import {AsyncPipe} from '@angular/common';
-import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
-import {MatToolbar} from '@angular/material/toolbar';
-import {NotesFormComponent} from './components/notes-form/notes-form.component';
-import {NoteService} from './services/note.service';
-import {Note} from './model/note.model';
-import {MatButtonModule} from '@angular/material/button';
-import {Theme, ThemeService} from './services/theme.service';
-import {Observable, Subscription} from 'rxjs';
-import {SidenavService} from './services/sidepanel.service';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { ThemeService, Theme } from './services/theme.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
-    RouterOutlet,
-    MatToolbar,
+    CommonModule,
+    RouterModule,
     MatSidenavModule,
-    NotesFormComponent,
-    RouterLink,
+    MatToolbarModule,
     MatButtonModule,
-    AsyncPipe
+    MatIconModule,
+    MatMenuModule,
+    MatListModule
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy{
-  @ViewChild('sidenav') sidenav!: MatSidenav;
-  private subs = new Subscription();
-
-  sidenavOpen = false;
-  selectedNote: Note = {id: '', title: '', content: '', category: '', updatedAt: new Date()};
-  theme$: Observable<Theme>;
+export class AppComponent implements OnInit, OnDestroy {
+  @ViewChild('sidenav') sidenav: any;
+  currentTheme$;
+  isSmallScreen = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private noteService: NoteService,
-    private sidenavService: SidenavService,
     private themeService: ThemeService,
-    private cdr: ChangeDetectorRef
+    private breakpointObserver: BreakpointObserver
   ) {
-    this.theme$ = this.themeService.theme$;
+    this.currentTheme$ = this.themeService.currentTheme$;
   }
 
-  ngOnInit(): void {
-    this.subs.add(
-      this.sidenavService.sidenavOpen$.subscribe(isOpen => {
-        if(isOpen){
-          this.sidenav.open();
-        }
-        else{
-          if(this.sidenav){
-            this.sidenav.close();
-          }
-        }
-        this.cdr.detectChanges();
-      })
-    )
-
-    this.subs.add(
-      this.sidenavService.selectedNote$.subscribe(note => {
-        this.selectedNote = <Note>note;
-        this.cdr.detectChanges();
-      })
-    );
+  ngOnInit() {
+    this.breakpointObserver.observe([
+      Breakpoints.HandsetPortrait,
+      Breakpoints.TabletPortrait
+    ]).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(result => {
+      this.isSmallScreen = result.matches;
+      if (!this.isSmallScreen) {
+        this.sidenav?.close();
+      }
+    });
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  saveNote(note: Note) {
-    this.noteService.saveNote(note);
-    this.sidenavService.closeSidenav();
-  }
-
-  createNote() {
-      this.sidenavService.openSidenav(this.noteService.getDefaultNote());
-  }
-
-  closeSidenav() {
-    this.sidenavOpen = false;
-    this.selectedNote = this.noteService.getDefaultNote();
+  setTheme(theme: Theme) {
+    this.themeService.setTheme(theme);
   }
 }

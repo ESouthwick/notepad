@@ -1,11 +1,37 @@
-<div [attr.data-theme]="theme">
+<div class="settings-container">
   <h2>Settings</h2>
-  <mat-form-field>
-    <mat-label>Display Mode</mat-label>
-    <mat-select [(value)]="theme" (selectionChange)="setTheme($event.value)">
-      <mat-option value="normal">Normal</mat-option>
-      <mat-option value="dark">Dark</mat-option>
-      <mat-option value="midnight">Midnight</mat-option>
-    </mat-select>
-  </mat-form-field>
+
+  <!-- Category Management -->
+  <div class="settings-section">
+    <h3>Category Management</h3>
+    <div class="category-input">
+      <mat-form-field appearance="outline">
+        <mat-label>New Category</mat-label>
+        <input matInput [(ngModel)]="newCategory" placeholder="Enter category name">
+        <button matSuffix mat-icon-button (click)="addCategory()" [disabled]="!newCategory">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div class="categories-list">
+      <h4>Existing Categories</h4>
+      <div class="category-item" *ngFor="let category of categories">
+        <span>{{ category }}</span>
+        <button mat-icon-button color="warn" (click)="removeCategory(category)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danger Zone -->
+  <div class="settings-section danger-zone">
+    <h3>Danger Zone</h3>
+    <button mat-raised-button color="warn" (click)="deleteAllNotes()">
+      <mat-icon>delete_forever</mat-icon>
+      Delete All Notes
+    </button>
+    <p class="warning-text">Warning: This action cannot be undone. All notes will be permanently deleted.</p>
+  </div>
 </div>

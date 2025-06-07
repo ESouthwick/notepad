@@ -1,36 +1,97 @@
-<div [attr.data-theme]="theme$ | async">
-@for (category of categories; track category.length){
-  <div class="category-section">
-  @if (categorizedNotes[category].length > 0) {
-  <h2>{{ category }}</h2>
-    <div class="notes-grid"
-         cdkDropList
-         [cdkDropListData]="categorizedNotes[category]"
-         [cdkDropListConnectedTo]="dropListIds"
-         (cdkDropListDropped)="drop($event, category)"
-         [id]="category + '-drop-list'">
-      @for (note of categorizedNotes[category]; track note.id) {
-        <mat-card cdkDrag class="note-card">
-          <mat-card-content class="note-content">
+<div class="notes-container" [class.table-view]="viewMode === 'table'">
+  <div class="view-toggle">
+    <button mat-icon-button (click)="toggleViewMode()" [matTooltip]="viewMode === 'cards' ? 'Switch to Table View' : 'Switch to Card View'">
+      <mat-icon>{{ viewMode === 'cards' ? 'view_list' : 'view_module' }}</mat-icon>
+    </button>
+  </div>
+
+  <!-- Table View -->
+  <div *ngIf="viewMode === 'table'" class="table-container">
+    <div class="search-bar">
+      <mat-form-field appearance="outline">
+        <mat-label>Search Notes</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" placeholder="Search by title, content, or category...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <table mat-table [dataSource]="filteredNotes" matSort (matSortChange)="applyFilters()" class="notes-table">
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let note">{{ note.title }}</td>
+      </ng-container>
+
+      <!-- Content Column -->
+      <ng-container matColumnDef="content">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Content</th>
+        <td mat-cell *matCellDef="let note">{{ note.content }}</td>
+      </ng-container>
+
+      <!-- Category Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+        <td mat-cell *matCellDef="let note">{{ note.category }}</td>
+      </ng-container>
+
+      <!-- Updated At Column -->
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Updated</th>
+        <td mat-cell *matCellDef="let note">{{ note.updatedAt | date:'medium' }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let note">
+          <button mat-icon-button color="primary" [routerLink]="['/edit', getNoteId(note)]">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteNote(note)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <!-- Card View -->
+  <div *ngIf="viewMode === 'cards'" class="cards-container">
+    <div *ngFor="let category of categories" class="category-section">
+      <h2>{{ category }}</h2>
+      <div class="notes-grid"
+           cdkDropList
+           [id]="category"
+           [cdkDropListData]="getCategoryNotes(category)"
+           [cdkDropListConnectedTo]="categories"
+           (cdkDropListDropped)="drop($event)">
+        <mat-card *ngFor="let note of getCategoryNotes(category)"
+                  cdkDrag
+                  class="note-card">
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+          </div>
+          <mat-card-header>
             <mat-card-title>{{ note.title }}</mat-card-title>
-            <p>{{ note.content | slice:0:50 }}...</p>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ note.content }}</p>
+            <p class="timestamp">Last updated: {{ note.updatedAt | date:'medium' }}</p>
           </mat-card-content>
-          <mat-card-actions class="note-actions">
-            <button mat-icon-button cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-            </button>
-            <button mat-icon-button (click)="editNote(note)">
+          <mat-card-actions>
+            <button mat-icon-button color="primary" [routerLink]="['/edit', getNoteId(note)]">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button (click)="deleteNote(note.id)">
+            <button mat-icon-button color="warn" (click)="deleteNote(note)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-card-actions>
         </mat-card>
-      }
+      </div>
     </div>
-    }
   </div>
-  }
 </div>
 
