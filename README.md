@@ -1,14 +1,14 @@
 # Angular Notepad App
 
-This is a simple notepad application built with Angular, featuring note creation, categorization, drag-and-drop functionality, and a streamlined UI. The app utilizes Angular Material for UI components and Angular CDK for its drag-and-drop capabilities. Notes are organized into predefined categories (e.g., Play, Work, Family, Home, Other) and can be edited, deleted, or moved between categories via drag-and-drop.
+This is a simple notepad application built with Angular and Node.js, featuring note creation, categorization, drag-and-drop functionality, and a streamlined UI. The app utilizes Angular Material for UI components, Angular CDK for its drag-and-drop capabilities, and MongoDB for persistent data storage. Notes are organized into predefined categories (e.g., Play, Work, Family, Home, Other) and can be edited, deleted, or moved between categories via drag-and-drop.
 
 ## Table of Contents
 
 * [Features](#features)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
-* [Usage](#usage)
 * [Project Structure](#project-structure)
+* [API Endpoints](#api-endpoints)
 
 ## Features
 
@@ -16,8 +16,9 @@ This is a simple notepad application built with Angular, featuring note creation
 * **Categorize Notes:** Organize your thoughts and ideas into predefined categories: Play, Work, Family, Home, and Other.
 * **Drag-and-Drop:** Seamlessly move notes between different categories or rearrange them within the same category using the power of Angular CDK drag-and-drop.
 * **Streamlined UI:** Enjoy a clean and focused design for note cards, featuring a vertical drag handle on the right, a delete icon at the bottom-right, and interactive hover effects.
-* **Theme Support:** Switch between a light and a dark theme to suit your preference and environment.
-* **Local Storage:** Your notes are persistently stored in the browser's local storage, ensuring your data is saved across sessions.
+* **Theme Support:** Switch between light, dark, and purple themes to suit your preference and environment.
+* **MongoDB Integration:** Your notes are persistently stored in MongoDB, ensuring your data is safely stored and accessible across sessions.
+* **RESTful API:** The application uses a Node.js backend with Express to provide a robust API for note management.
 * **Responsive Design:** The application adapts gracefully to various screen sizes, providing a consistent experience on desktops, tablets, and mobile devices.
 
 ## Prerequisites
@@ -32,26 +33,40 @@ Before setting up the project, make sure you have the following installed on you
     npm install -g @angular/cli
     ```
 
+* **MongoDB:** (v6.0 or later recommended) - [Download MongoDB](https://www.mongodb.com/try/download/community)
+
 ## Installation
 
 Follow these steps to get the Angular Notepad App running on your local machine:
 
-1.  **Clone the Repository:**
+1. **Clone the Repository:**
 
     ```bash
     git clone [https://github.com/your-username/angular-notepad-app.git](https://github.com/your-username/angular-notepad-app.git)
     cd angular-notepad-app
     ```
 
-2.  **Install Dependencies:**
+2. **Set Up Environment Variables:**
 
-    Navigate to the project directory and run:
-
-    ```bash
-    npm install
+    Create a `.env` file in the `backend` directory with the following content:
+    ```
+    MONGODB_URI=mongodb://localhost:27017/notepad
     ```
 
-3.  **Install Angular Material and CDK:**
+3. **Install Dependencies:**
+
+    Install both frontend and backend dependencies:
+    ```bash
+    # Install frontend dependencies
+    npm install
+
+    # Install backend dependencies
+    cd backend
+    npm install
+    cd ..
+    ```
+
+4. **Install Angular Material and CDK:**
 
     If you haven't already, add Angular Material for UI components and Angular CDK for drag-and-drop functionality:
 
@@ -60,78 +75,73 @@ Follow these steps to get the Angular Notepad App running on your local machine:
     npm install @angular/cdk
     ```
 
-4.  **Run the Application:**
+5. **Start the Backend Server:**
 
-    Start the development server by executing:
+    In the `backend` directory, start the Node.js server:
+    ```bash
+    cd backend
+    npm start
+    ```
 
+6. **Run the Frontend Application:**
+
+    In a new terminal, start the Angular development server:
     ```bash
     ng serve
     ```
 
     Open your web browser and navigate to `http://localhost:4200` to view the application.
 
-## Usage
+## API Endpoints
 
-Here's how to interact with the Angular Notepad App:
+The backend provides the following RESTful API endpoints:
 
-* **View Notes:**
-    * Notes are displayed in a responsive grid, neatly organized under their respective categories: Play, Work, Family, Home, and Other.
-    * Each note card presents the note's title and a brief preview of its content (truncated to the first 50 characters).
-
-* **Add a Note:**
-    * Open the sidenav (typically triggered by an "Add Note" button or similar UI element).
-    * Provide a title and the main content for your new note.
-    * Select the desired category for the note.
-    * Save the note.
-
-* **Edit a Note:**
-    * Click on the bottom-right area of a note card (where the edit functionality is typically located, even if the button is visually subtle).
-    * The sidenav will open, pre-filled with the selected note's details.
-    * Modify the title, content, or category as needed.
-    * Save your changes.
-
-* **Delete a Note:**
-    * Locate the trash can icon at the bottom-right of the note card.
-    * Click the icon to permanently remove the note.
-
-* **Move Notes:**
-    * Identify the vertical drag handle (⋮⋮) situated on the right side of each note card.
-    * Click and drag the handle to move the note card.
-    * Drop the note card onto a different category to reassign it, or within the same category to change its order.
-
-* **Toggle Theme:**
-    * Look for a theme toggle switch or button in the application's UI (if implemented).
-    * Use it to switch between the light and dark color themes.
+* `POST /api/notes` - Create a new note
+* `GET /api/notes` - Retrieve all notes
+* `GET /api/notes/:id` - Retrieve a specific note by ID
+* `PUT /api/notes/:id` - Update a specific note
+* `DELETE /api/notes/:id` - Delete a specific note
 
 ## Project Structure
 
 The project is organized into the following key directories and files:
 
-```src/
-├── app/
-│   ├── model/
-│   │   └── note.model.ts                   # Defines the interfaces for Note and CategorizedNotes
-|   ├── services/
-│   │   ├── note.service.ts                 # Manages note data (CRUD operations, drag-and-drop logic)
-│   │   ├── theme.service.ts                # Handles the application's theme switching functionality
-│   │   └── sidepanel.service.ts            # Controls the behavior and state of the sidenav component
-|   └── components/
-|       ├── notes-form/
-│       |   ├── notes-form.component.ts     # Component responsible for displaying and interacting with a note
-│       |   ├── notes-form.component.html   # HTML template for rendering the note
-│       |   └── notes-form.component.scss   # Styles specific to the note component
-│       └── notes-list/
-│           ├── notes-list.component.ts     # Component responsible for displaying and interacting with lists of notes
-│           ├── notes-list.component.html   # HTML template for rendering the notes list
-│           └── notes-list.component.scss   # Styles specific to the notes list component
-└── styles.scss                             # Global style definitions for the application
 ```
+├── src/                      # Frontend Angular application
+│   ├── app/
+│   │   ├── model/
+│   │   │   └── note.model.ts                   # Defines the interfaces for Note and CategorizedNotes
+│   │   ├── services/
+│   │   │   ├── note.service.ts                 # Manages note data (CRUD operations, drag-and-drop logic)
+│   │   │   ├── theme.service.ts                # Handles the application's theme switching functionality
+│   │   │   └── sidepanel.service.ts            # Controls the behavior and state of the sidenav component
+│   │   └── components/
+│   │       ├── notes-form/
+│   │       │   ├── notes-form.component.ts     # Component for displaying and interacting with a note
+│   │       │   ├── notes-form.component.html   # HTML template for the note
+│   │       │   └── notes-form.component.scss   # Styles for the note component
+│   │       └── notes-list/
+│   │           ├── notes-list.component.ts     # Component for displaying and interacting with lists of notes
+│   │           ├── notes-list.component.html   # HTML template for the notes list
+│   │           └── notes-list.component.scss   # Styles for the notes list component
+│   └── styles.scss                             # Global style definitions
+│
+└── backend/                   # Backend Node.js application
+    ├── server.js              # Express server setup and API endpoints
+    ├── mongodb.service.js     # MongoDB connection and CRUD operations
+    └── .env                   # Environment variables (create this file)
+```
+
 **Key Components:**
 
-* **`NotesListComponent`:** This component displays notes organized by category, handles user interactions like drag-and-drop, and provides functionality for editing and deleting notes.
-* **`NotesFormComponent`:** This component displays a form for note creation, handles user inputs for each part of the note, and provides functionality for editing.
-* **`NoteService`:** This service is central to managing note data. It handles creating, reading, updating, and deleting notes, as well as organizing them into categories and persisting them in local storage.
-* **`ThemeService`:** This service manages the application's theme, allowing users to switch between light and dark modes. It typically uses an observable to notify components of theme changes.
-* **`SidenavService`:** This service controls the visibility and data flow for the sidenav component, which is used for adding and editing notes.
+* **Frontend:**
+  * **`NotesListComponent`:** Displays notes organized by category, handles user interactions like drag-and-drop, and provides functionality for editing and deleting notes.
+  * **`NotesFormComponent`:** Displays a form for note creation, handles user inputs for each part of the note, and provides functionality for editing.
+  * **`NoteService`:** Manages note data through HTTP requests to the backend API.
+  * **`ThemeService`:** Manages the application's theme, allowing users to switch between light, dark, and purple modes.
+
+* **Backend:**
+  * **`server.js`:** Sets up the Express server and defines API endpoints.
+  * **`mongodb.service.js`:** Handles MongoDB connection and provides CRUD operations for notes.
 
 **Feel free to suggest improvements or report issues. Happy note-taking!**
